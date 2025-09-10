@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,32 +13,73 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
+        :root {
+            --bg-primary: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            --bg-secondary: rgba(255, 255, 255, 0.95);
+            --text-primary: #333;
+            --text-secondary: #495057;
+            --header-bg: linear-gradient(to right, #ff7e5f, #feb47b);
+            --header-text: white;
+            --instructions-bg: #f8f9fa;
+            --device-bg: #e9ecef;
+            --device-item-bg: white;
+            --drop-zone-bg: #e9ecef;
+            --drop-zone-border: #adb5bd;
+            --button-primary: linear-gradient(to right, #2a9d8f, #264653);
+            --button-secondary: linear-gradient(to right, #e63946, #d90429);
+            --button-tertiary: linear-gradient(to right, #3a86ff, #023e8a);
+            --message-color: #2a9d8f;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .dark-mode {
+            --bg-primary: linear-gradient(135deg, #1a033d 0%, #0c2b6c 100%);
+            --bg-secondary: rgba(30, 30, 40, 0.95);
+            --text-primary: #f0f0f0;
+            --text-secondary: #b0b0c0;
+            --header-bg: linear-gradient(to right, #7c3c20, #b3622a);
+            --header-text: #f0f0f0;
+            --instructions-bg: #2a2a3a;
+            --device-bg: #2a2a3a;
+            --device-item-bg: #3a3a4a;
+            --drop-zone-bg: #2a2a3a;
+            --drop-zone-border: #555570;
+            --button-primary: linear-gradient(to right, #1d6d63, #1a3c46);
+            --button-secondary: linear-gradient(to right, #9e2835, #8a031c);
+            --button-tertiary: linear-gradient(to right, #2a5bb0, #022b6a);
+            --message-color: #3bb0a0;
+            --shadow-color: rgba(0, 0, 0, 0.4);
+        }
+        
         body {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background: var(--bg-primary);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
-            color: #333;
+            color: var(--text-primary);
+            transition: background 0.3s ease, color 0.3s ease;
         }
         
         .container {
             width: 100%;
             max-width: 1000px;
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: var(--bg-secondary);
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px var(--shadow-color);
             overflow: hidden;
             margin: 20px 0;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
         
         header {
-            background: linear-gradient(to right, #ff7e5f, #feb47b);
-            color: white;
+            background: var(--header-bg);
+            color: var(--header-text);
             text-align: center;
             padding: 20px;
             position: relative;
+            transition: background 0.3s ease, color 0.3s ease;
         }
         
         h1 {
@@ -49,24 +89,27 @@
         }
         
         .instructions {
-            background-color: #f8f9fa;
+            background-color: var(--instructions-bg);
             padding: 15px 20px;
-            border-bottom: 2px solid #e9ecef;
+            border-bottom: 2px solid var(--device-bg);
             text-align: center;
+            transition: background-color 0.3s ease;
         }
         
         .game-info {
             display: flex;
             justify-content: space-between;
             padding: 15px 20px;
-            background-color: #f8f9fa;
-            border-bottom: 2px solid #e9ecef;
+            background-color: var(--instructions-bg);
+            border-bottom: 2px solid var(--device-bg);
+            transition: background-color 0.3s ease;
         }
         
         .score, .timer {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #495057;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
         }
         
         .timer {
@@ -83,19 +126,21 @@
         .devices-container {
             flex: 1;
             min-width: 300px;
-            background-color: #e9ecef;
+            background-color: var(--device-bg);
             border-radius: 10px;
             padding: 15px;
             display: flex;
             flex-direction: column;
+            transition: background-color 0.3s ease;
         }
         
         .category-title {
             text-align: center;
             margin-bottom: 15px;
-            color: #495057;
+            color: var(--text-secondary);
             font-weight: bold;
             font-size: 1.3rem;
+            transition: color 0.3s ease;
         }
         
         .devices-list {
@@ -108,21 +153,21 @@
         .device-item {
             width: 120px;
             height: 120px;
-            background-color: white;
+            background-color: var(--device-item-bg);
             border-radius: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             cursor: grab;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s ease;
             padding: 10px;
         }
         
         .device-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 6px 12px var(--shadow-color);
         }
         
         .device-item img {
@@ -147,16 +192,18 @@
         }
         
         .category {
-            background-color: #f8f9fa;
+            background-color: var(--instructions-bg);
             border-radius: 10px;
             padding: 15px;
             min-height: 200px;
+            transition: background-color 0.3s ease;
         }
         
         .category h3 {
             text-align: center;
             margin-bottom: 15px;
-            color: #495057;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
         }
         
         .drop-zone {
@@ -165,9 +212,10 @@
             gap: 15px;
             min-height: 150px;
             padding: 15px;
-            background-color: #e9ecef;
+            background-color: var(--drop-zone-bg);
             border-radius: 8px;
-            border: 2px dashed #adb5bd;
+            border: 2px dashed var(--drop-zone-border);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
         
         .drop-zone.hover {
@@ -179,8 +227,9 @@
             text-align: center;
             padding: 15px;
             font-weight: bold;
-            color: #2a9d8f;
+            color: var(--message-color);
             min-height: 30px;
+            transition: color 0.3s ease;
         }
         
         .controls {
@@ -188,8 +237,9 @@
             justify-content: center;
             gap: 20px;
             padding: 15px;
-            background-color: #f8f9fa;
-            border-top: 2px solid #e9ecef;
+            background-color: var(--instructions-bg);
+            border-top: 2px solid var(--device-bg);
+            transition: background-color 0.3s ease;
         }
         
         button {
@@ -203,23 +253,23 @@
         }
         
         #start-btn {
-            background: linear-gradient(to right, #2a9d8f, #264653);
+            background: var(--button-primary);
             color: white;
         }
         
         #reset-btn {
-            background: linear-gradient(to right, #e63946, #d90429);
+            background: var(--button-secondary);
             color: white;
         }
         
         #submit-btn {
-            background: linear-gradient(to right, #3a86ff, #023e8a);
+            background: var(--button-tertiary);
             color: white;
         }
         
         button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px var(--shadow-color);
         }
         
         button:disabled {
@@ -237,6 +287,50 @@
             margin-top: auto;
         }
         
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .toggle-btn {
+            width: 60px;
+            height: 30px;
+            background: var(--button-tertiary);
+            border-radius: 15px;
+            padding: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+        
+        .toggle-thumb {
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .dark-mode .toggle-thumb {
+            transform: translateX(30px);
+        }
+        
+        .toggle-icon {
+            font-size: 12px;
+            color: #3a86ff;
+        }
+        
+        .dark-mode .toggle-icon {
+            color: #1a033d;
+        }
+        
         /* Results Modal */
         .modal {
             display: none;
@@ -252,19 +346,20 @@
         }
         
         .modal-content {
-            background-color: white;
+            background-color: var(--bg-secondary);
             padding: 30px;
             border-radius: 15px;
             max-width: 600px;
             width: 90%;
             text-align: center;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 25px var(--shadow-color);
             max-height: 90vh;
             overflow-y: auto;
+            transition: background-color 0.3s ease;
         }
         
         .modal h2 {
-            color: #2a9d8f;
+            color: var(--message-color);
             margin-bottom: 20px;
         }
         
@@ -312,7 +407,8 @@
             margin: 10px 0;
             padding: 10px;
             border-radius: 8px;
-            background-color: #f8f9fa;
+            background-color: var(--instructions-bg);
+            transition: background-color 0.3s ease;
         }
         
         .answer-icon {
@@ -346,10 +442,33 @@
                 flex-direction: column;
                 gap: 15px;
             }
+            
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+            }
+            
+            .toggle-btn {
+                width: 50px;
+                height: 25px;
+            }
+            
+            .dark-mode .toggle-thumb {
+                transform: translateX(25px);
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Theme Toggle Button -->
+    <div class="theme-toggle">
+        <div class="toggle-btn" id="theme-toggle">
+            <div class="toggle-thumb">
+                <i class="toggle-icon fas fa-adjust"></i>
+            </div>
+        </div>
+    </div>
+    
     <div class="container">
         <header>
             <h1>Computer Input & Output Devices</h1>
@@ -370,27 +489,27 @@
                 <h2 class="category-title">Devices</h2>
                 <div class="devices-list" id="devices">
                     <div class="device-item" draggable="true" data-type="input" data-name="Keyboard">
-                        <img src="https://cdn-icons-png.flaticon.com/512/25/25671.png" alt="Keyboard">
+                        <img src="/media/key-removebg-preview.png" alt="Keyboard">
                         <div class="device-name">Keyboard</div>
                     </div>
                     <div class="device-item" draggable="true" data-type="output" data-name="Monitor">
-                        <img src="https://cdn-icons-png.flaticon.com/512/69/69480.png" alt="Monitor">
+                        <img src="/media/monitor-image-removebg-preview.png" alt="Monitor">
                         <div class="device-name">Monitor</div>
                     </div>
                     <div class="device-item" draggable="true" data-type="input" data-name="Mouse">
-                        <img src="https://cdn-icons-png.flaticon.com/512/50/50405.png" alt="Mouse">
+                        <img src="/media/mousd-removebg-preview.png" alt="Mouse">
                         <div class="device-name">Mouse</div>
                     </div>
                     <div class="device-item" draggable="true" data-type="output" data-name="Printer">
-                        <img src="https://cdn-icons-png.flaticon.com/512/54/54481.png" alt="Printer">
+                        <img src="/media/printer-removebg-preview.png" alt="Printer">
                         <div class="device-name">Printer</div>
                     </div>
                     <div class="device-item" draggable="true" data-type="input" data-name="Microphone">
-                        <img src="https://cdn-icons-png.flaticon.com/512/57/57145.png" alt="Microphone">
+                        <img src="/media/mic-removebg-preview.png" alt="Microphone">
                         <div class="device-name">Microphone</div>
                     </div>
                     <div class="device-item" draggable="true" data-type="output" data-name="Speakers">
-                        <img src="https://cdn-icons-png.flaticon.com/512/78/78386.png" alt="Speakers">
+                        <img src="/media/speaker-removebg-preview.png" alt="Speakers">
                         <div class="device-name">Speakers</div>
                     </div>
                 </div>
@@ -400,14 +519,14 @@
                 <div class="category">
                     <h3>Input Devices</h3>
                     <div class="drop-zone" id="input-drop">
-                        <p>Drop input devices here</p>
+                        <p>Drop here</p>
                     </div>
                 </div>
                 
                 <div class="category">
                     <h3>Output Devices</h3>
                     <div class="drop-zone" id="output-drop">
-                        <p>Drop output devices here</p>
+                        <p>Drop here</p>
                     </div>
                 </div>
             </div>
@@ -423,7 +542,7 @@
     </div>
     
     <footer>
-        Created by Mr. Hemal - Computer Devices Learning Game
+        &copy; Blank-X-Innovations - Computer Devices Learning Game
     </footer>
 
     <!-- Results Modal -->
@@ -479,6 +598,7 @@
             const detailedResultsElement = document.getElementById('detailed-results');
             const playAgainBtn = document.getElementById('play-again-btn');
             const closeBtn = document.getElementById('close-btn');
+            const themeToggle = document.getElementById('theme-toggle');
             
             let score = 0;
             let timeLeft = 60;
@@ -486,6 +606,22 @@
             let gameActive = false;
             let correctAnswers = 0;
             let totalDevices = devices.length;
+            
+            // Theme toggle functionality
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                // Save theme preference to localStorage
+                if (document.body.classList.contains('dark-mode')) {
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+            
+            // Check for saved theme preference
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
             
             // Initialize drag and drop
             devices.forEach(device => {
