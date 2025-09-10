@@ -331,6 +331,33 @@
             color: #1a033d;
         }
         
+        /* Language Toggle */
+        .language-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+        
+        .lang-btn {
+            padding: 10px 15px;
+            background: var(--button-tertiary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+        
         /* Results Modal */
         .modal {
             display: none;
@@ -448,6 +475,11 @@
                 right: 10px;
             }
             
+            .language-toggle {
+                top: 10px;
+                left: 10px;
+            }
+            
             .toggle-btn {
                 width: 50px;
                 height: 25px;
@@ -460,6 +492,14 @@
     </style>
 </head>
 <body>
+    <!-- Language Toggle Button -->
+    <div class="language-toggle">
+        <button class="lang-btn" id="language-toggle">
+            <i class="fas fa-language"></i>
+            <span id="language-text">සිංහල</span>
+        </button>
+    </div>
+    
     <!-- Theme Toggle Button -->
     <div class="theme-toggle">
         <div class="toggle-btn" id="theme-toggle">
@@ -599,6 +639,8 @@
             const playAgainBtn = document.getElementById('play-again-btn');
             const closeBtn = document.getElementById('close-btn');
             const themeToggle = document.getElementById('theme-toggle');
+            const languageToggle = document.getElementById('language-toggle');
+            const languageText = document.getElementById('language-text');
             
             let score = 0;
             let timeLeft = 60;
@@ -616,6 +658,12 @@
                 } else {
                     localStorage.setItem('theme', 'light');
                 }
+            });
+            
+            // Language toggle functionality
+            languageToggle.addEventListener('click', function() {
+                // Redirect to the Sinhala version of the page
+                window.location.href = 'sinhala.html';
             });
             
             // Check for saved theme preference
