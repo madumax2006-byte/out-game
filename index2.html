@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Typing Practice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        :root {
+            --primary: #6e8efb;
+            --secondary: #a777e3;
+            --background: #f8f9fa;
+            --text: #333;
+            --card-bg: #ffffff;
+            --error: #ff4757;
+            --success: #2ed573;
+            --warning: #ffa502;
+            --border: #ddd;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark-mode {
+            --primary: #8fa6ff;
+            --secondary: #c19fff;
+            --background: #1a1a2e;
+            --text: #f0f0f0;
+            --card-bg: #16213e;
+            --error: #ff6b81;
+            --success: #3dd68c;
+            --warning: #ffb74d;
+            --border: #374151;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--text);
+        }
+        
+        .container {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow);
+            width: 90%;
+            max-width: 800px;
+            padding: 30px;
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        h1 {
+            color: var(--primary);
+            font-size: 28px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+        }
+        
+        .btn i {
+            font-size: 16px;
+        }
+        
+        .instructions {
+            background-color: var(--background);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            text-align: left;
+            font-size: 15px;
+            color: var(--text);
+            line-height: 1.5;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .instructions h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .paragraph-box {
+            background-color: var(--background);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: left;
+            line-height: 1.6;
+            font-size: 17px;
+            color: var(--text);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .typing-box {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            resize: vertical;
+            background-color: var(--card-bg);
+            color: var(--text);
+        }
+        
+        .typing-box:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(110, 142, 251, 0.2);
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-box {
+            background-color: var(--background);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--text);
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .reset-btn {
+            background-color: var(--error);
+            color: white;
+        }
+        
+        .new-text-btn {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .result {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-weight: 500;
+            display: none;
+            text-align: center;
+        }
+        
+        .success {
+            background-color: rgba(46, 213, 115, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+            display: block;
+        }
+        
+        .highlight {
+            background-color: var(--warning);
+            padding: 2px 4px;
+            border-radius: 3px;
+            color: #000;
+        }
+        
+        .incorrect-word {
+            color: var(--error);
+            text-decoration: underline wavy var(--error);
+        }
+        
+        .mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--background);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--shadow);
+        }
+        
+        /* Popup Styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .popup {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            position: relative;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: transform 0.4s, opacity 0.4s;
+        }
+        
+        .popup-overlay.active .popup {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text);
+        }
+        
+        .popup-title {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 24px;
+            text-align: center;
+        }
+        
+        .popup-content {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .popup-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .popup-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .popup-btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .popup-btn-secondary {
+            background-color: var(--background);
+            color: var(--text);
+        }
+        
+        /* Footer Styles */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .footer-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .footer-logo i {
+            color: #ffdd59;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .footer-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .footer-link:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .popup {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="mode-toggle" id="mode-toggle">
+            <i class="fas fa-moon"></i>
+        </div>
+        
+        <div class="header">
+            <h1>Typing Practice with Spell Check</h1>
+            <div class="controls">
+                <button class="btn" id="language-btn">
+                    <i class="fas fa-language"></i> Language
+                </button>
+                <button class="btn" id="help-btn">
+                    <i class="fas fa-question-circle"></i> Help
+                </button>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>Instructions:</h3>
+            <ul>
+                <li>Type the paragraph below exactly as shown in the text box</li>
+                <li>If you make a spelling mistake, the word will turn <span class="incorrect-word">red</span></li>
+                <li>Correct your mistakes to continue typing</li>
+                <li>Press the "Reset" button to clear your text and start over</li>
+                <li>Press the "New Text" button to get a different paragraph to practice</li>
+                <li>When you finish typing the entire text correctly, you'll see a success message</li>
+            </ul>
+        </div>
+        
+        <div class="paragraph-box">
+            <p id="paragraph">The quick brown fox jumps over the lazy dog. This sentence contains all the letters in the English alphabet. Typing accurately is an essential skill for efficient communication in the digital age.</p>
+        </div>
+        
+        <textarea class="typing-box" id="typing-box" placeholder="Start typing the paragraph here..."></textarea>
+        
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-value" id="wpm">0</div>
+                <div class="stat-label">Words per Minute</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="accuracy">100%</div>
+                <div class="stat-label">Accuracy</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="errors">0</div>
+                <div class="stat-label">Errors</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="typed">0</div>
+                <div class="stat-label">Characters Typed</div>
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <button class="action-btn reset-btn" id="reset-btn">
+                <i class="fas fa-redo"></i> Reset
+            </button>
+            <button class="action-btn new-text-btn" id="new-text-btn">
+                <i class="fas fa-sync"></i> New Text
+            </button>
+        </div>
+        
+        <div class="result success" id="success-message">
+            Congratulations! You've typed the entire text correctly with <span id="final-accuracy" class="highlight">100%</span> accuracy and a speed of <span id="final-wpm" class="highlight">0 WPM</span>.
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <i class="fas fa-lightbulb"></i>
+                <span>Blank-X-Innovations</span>
+            </div>
+            <div>© 2023 Blank-X-Innovations. All rights reserved.</div>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Privacy Policy</a>
+                <a href="#" class="footer-link">Terms of Service</a>
+                <a href="#" class="footer-link">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Popup Overlay -->
+    <div class="popup-overlay" id="popup-overlay">
+        <div class="popup">
+            <button class="popup-close" id="popup-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 class="popup-title" id="popup-title">Popup Title</h2>
+            <div class="popup-content" id="popup-content">
+                Popup content goes here.
+            </div>
+            <div class="popup-buttons">
+                <button class="popup-btn popup-btn-primary" id="popup-confirm">Confirm</button>
+                <button class="popup-btn popup-btn-secondary" id="popup-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const paragraphElement = document.getElementById('paragraph');
+            const typingBox = document.getElementById('typing-box');
+            const resetBtn = document.getElementById('reset-btn');
+            const newTextBtn = document.getElementById('new-text-btn');
+            const accuracyElement = document.getElementById('accuracy');
+            const errorsElement = document.getElementById('errors');
+            const typedElement = document.getElementById('typed');
+            const wpmElement = document.getElementById('wpm');
+            const successMessage = document.getElementById('success-message');
+            const finalAccuracy = document.getElementById('final-accuracy');
+            const finalWpm = document.getElementById('final-wpm');
+            const modeToggle = document.getElementById('mode-toggle');
+            const languageBtn = document.getElementById('language-btn');
+            const helpBtn = document.getElementById('help-btn');
+            
+            // Popup elements
+            const popupOverlay = document.getElementById('popup-overlay');
+            const popupClose = document.getElementById('popup-close');
+            const popupTitle = document.getElementById('popup-title');
+            const popupContent = document.getElementById('popup-content');
+            const popupConfirm = document.getElementById('popup-confirm');
+            const popupCancel = document.getElementById('popup-cancel');
+            
+            let originalParagraph = paragraphElement.textContent;
+            let errors = 0;
+            let totalTyped = 0;
+            let startTime = null;
+            let timerInterval = null;
+            let isTiming = false;
+            
+            // Array of different paragraphs for practice
+            const practiceParagraphs = [
+                "The quick brown fox jumps over the lazy dog. This sentence contains all the letters in the English alphabet. Typing accurately is an essential skill for efficient communication in the digital age.",
+                "Programming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using many programming languages such as JavaScript, Python, C++, and Ruby.",
+                "The weather is beautiful today with clear blue skies and a gentle breeze. It's the perfect day to go for a walk in the park or have a picnic with friends and family.",
+                "Learning to type quickly and accurately is an important skill in today's digital world. With practice, you can improve your typing speed and reduce errors significantly.",
+                "Reading books is one of the best habits you can develop. Books expand your knowledge, improve your focus, and enhance your imagination. Try to read at least a few pages every day."
+            ];
+            
+            // Initialize the typing box
+            typingBox.value = '';
+            
+            // Popup functions
+            function showPopup(title, content, confirmCallback = null, cancelCallback = null) {
+                popupTitle.textContent = title;
+                popupContent.innerHTML = content;
+                
+                // Set up confirm button
+                if (confirmCallback) {
+                    popupConfirm.style.display = 'block';
+                    popupConfirm.onclick = function() {
+                        confirmCallback();
+                        hidePopup();
+                    };
+                } else {
+                    popupConfirm.style.display = 'none';
+                }
+                
+                // Set up cancel button
+                if (cancelCallback) {
+                    popupCancel.style.display = 'block';
+                    popupCancel.onclick = function() {
+                        if (cancelCallback) cancelCallback();
+                        hidePopup();
+                    };
+                } else {
+                    popupCancel.style.display = 'none';
+                }
+                
+                // Show the popup
+                popupOverlay.classList.add('active');
+            }
+            
+            function hidePopup() {
+                popupOverlay.classList.remove('active');
+            }
+            
+            // Start timing function
+            function startTimer() {
+                if (!isTiming) {
+                    startTime = new Date();
+                    timerInterval = setInterval(updateWPM, 1000);
+                    isTiming = true;
+                }
+            }
+            
+            // Stop timing function
+            function stopTimer() {
+                if (isTiming) {
+                    clearInterval(timerInterval);
+                    isTiming = false;
+                }
+            }
+            
+            // Calculate and update WPM
+            function updateWPM() {
+                if (startTime) {
+                    const elapsedTime = (new Date() - startTime) / 60000; // in minutes
+                    const words = typingBox.value.trim().split(/\s+/).length;
+                    const wpm = Math.round(words / elapsedTime);
+                    wpmElement.textContent = isNaN(wpm) ? 0 : wpm;
+                }
+            }
+            
+            // Function to check spelling
+            function checkSpelling() {
+                const typedText = typingBox.value;
+                const originalText = originalParagraph;
+                
+                // Start timer on first keystroke
+                if (typedText.length === 1 && !isTiming) {
+                    startTimer();
+                }
+                
+                // Reset errors and total typed
+                errors = 0;
+                totalTyped = typedText.length;
+                
+                // Split into words for word-level checking
+                const typedWords = typedText.split(/\s+/);
+                const originalWords = originalText.split(/\s+/);
+                
+                // Check each word
+                for (let i = 0; i < typedWords.length; i++) {
+                    if (i >= originalWords.length) {
+                        errors += typedWords[i].length; // Extra words are errors
+                    } else if (typedWords[i] !== originalWords[i]) {
+                        // Count errors in this word
+                        for (let j = 0; j < typedWords[i].length; j++) {
+                            if (j >= originalWords[i].length || typedWords[i][j] !== originalWords[i][j]) {
+                                errors++;
+                            }
+                        }
+                        // Add errors if the typed word is shorter than the original
+                        if (typedWords[i].length < originalWords[i].length) {
+                            errors += originalWords[i].length - typedWords[i].length;
+                        }
+                    }
+                }
+                
+                // Add potential errors if the typed text has more words than original
+                if (typedWords.length > originalWords.length) {
+                    for (let i = originalWords.length; i < typedWords.length; i++) {
+                        errors += typedWords[i].length;
+                    }
+                }
+                
+                // Calculate accuracy
+                const accuracy = totalTyped > 0 ? Math.max(0, Math.round(((totalTyped - errors) / totalTyped) * 100)) : 100;
+                
+                // Update stats
+                accuracyElement.textContent = accuracy + '%';
+                errorsElement.textContent = errors;
+                typedElement.textContent = totalTyped;
+                updateWPM();
+                
+                // Change text color if there are errors
+                if (errors > 0) {
+                    successMessage.style.display = 'none';
+                } else {
+                    // Show success message if the entire text is typed correctly
+                    if (typedText.length === originalText.length) {
+                        stopTimer();
+                        successMessage.style.display = 'block';
+                        finalAccuracy.textContent = accuracy + '%';
+                        finalWpm.textContent = wpmElement.textContent + ' WPM';
+                        
+                        // Show congratulations popup
+                        showPopup(
+                            'Congratulations!', 
+                            'You have successfully typed the entire text with ' + accuracy + '% accuracy at a speed of ' + wpmElement.textContent + ' WPM!',
+                            function() {
+                                // Confirm callback - load new text
+                                loadNewParagraph();
+                            }
+                        );
+                    } else {
+                        successMessage.style.display = 'none';
+                    }
+                }
+            }
+            
+            // Function to reset the typing box
+            function resetTyping() {
+                showPopup(
+                    'Reset Progress',
+                    'Are you sure you want to reset your typing progress? This will clear all text and reset statistics.',
+                    function() {
+                        // Confirm reset
+                        typingBox.value = '';
+                        errors = 0;
+                        totalTyped = 0;
+                        accuracyElement.textContent = '100%';
+                        errorsElement.textContent = '0';
+                        typedElement.textContent = '0';
+                        wpmElement.textContent = '0';
+                        successMessage.style.display = 'none';
+                        stopTimer();
+                        isTiming = false;
+                        startTime = null;
+                        typingBox.focus();
+                    }
+                );
+            }
+            
+            // Function to load a new paragraph
+            function loadNewParagraph() {
+                // Get a random paragraph from the array
+                const randomIndex = Math.floor(Math.random() * practiceParagraphs.length);
+                originalParagraph = practiceParagraphs[randomIndex];
+                paragraphElement.textContent = originalParagraph;
+                
+                // Reset the typing box
+                typingBox.value = '';
+                errors = 0;
+                totalTyped = 0;
+                accuracyElement.textContent = '100%';
+                errorsElement.textContent = '0';
+                typedElement.textContent = '0';
+                wpmElement.textContent = '0';
+                successMessage.style.display = 'none';
+                stopTimer();
+                isTiming = false;
+                startTime = null;
+                typingBox.focus();
+            }
+            
+            // Toggle dark/light mode
+            function toggleDarkMode() {
+                document.body.classList.toggle('dark-mode');
+                const icon = modeToggle.querySelector('i');
+                if (document.body.classList.contains('dark-mode')) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                    
+                    // Show dark mode notification
+                    showPopup('Dark Mode Enabled', 'The interface has been switched to dark mode for comfortable typing in low light conditions.');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                    
+                    // Show light mode notification
+                    showPopup('Light Mode Enabled', 'The interface has been switched to light mode for better visibility in well-lit environments.');
+                }
+            }
+            
+            // Show help information
+            function showHelp() {
+                showPopup(
+                    'Typing Practice Help',
+                    '<ul style="padding-left: 20px; margin: 15px 0;">' +
+                    '<li>Type the text exactly as shown above</li>' +
+                    '<li>Incorrect words will be highlighted in <span style="color: var(--error)">red</span></li>' +
+                    '<li>Your typing speed (WPM) and accuracy are tracked</li>' +
+                    '<li>Use the buttons to reset or get new text</li>' +
+                    '<li>Toggle dark mode using the moon/sun icon</li>' +
+                    '</ul>'
+                );
+            }
+            
+            // Show language options
+            function showLanguageOptions() {
+                showPopup(
+                    'Language Options',
+                    '<p>Select your preferred language:</p>' +
+                    '<div style="display: flex; flex-direction: column; gap: 10px; margin: 15px 0;">' +
+                    '<button class="popup-btn popup-btn-primary" style="justify-content: center;" onclick="alert(\'English selected\')">English (Current)</button>' +
+                    '<button class="popup-btn popup-btn-secondary" style="justify-content: center;" onclick="alert(\'Sinhala selected\')">Sinhala</button>' +
+                    '<button class="popup-btn popup-btn-secondary" style="justify-content: center;" onclick="alert(\'Tamil selected\')">Tamil</button>' +
+                    '</div>' +
+                    '<p>Other languages will be added in future updates.</p>'
+                );
+            }
+            
+            // Event listeners
+            typingBox.addEventListener('input', checkSpelling);
+            resetBtn.addEventListener('click', resetTyping);
+            newTextBtn.addEventListener('click', loadNewParagraph);
+            modeToggle.addEventListener('click', toggleDarkMode);
+            helpBtn.addEventListener('click', showHelp);
+            languageBtn.addEventListener('click', showLanguageOptions);
+            popupClose.addEventListener('click', hidePopup);
+            popupOverlay.addEventListener('click', function(e) {
+                if (e.target === popupOverlay) hidePopup();
+            });
+            
+            // Focus on the typing box when the page loads
+            typingBox.focus();
+            
+            // Show welcome message
+            setTimeout(function() {
+                showPopup(
+                    'Welcome to Typing Practice!',
+                    'This application helps you improve your typing skills with real-time spell checking and statistics tracking. Start typing the text above to begin!'
+                );
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

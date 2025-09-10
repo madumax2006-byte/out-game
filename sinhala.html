@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>පරිගණක ආදාන හා ප්‍රතිදාන උපාංග ක්‍රීඩාව</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --bg-primary: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            --bg-secondary: rgba(255, 255, 255, 0.95);
+            --text-primary: #333;
+            --text-secondary: #495057;
+            --header-bg: linear-gradient(to right, #ff7e5f, #feb47b);
+            --header-text: white;
+            --instructions-bg: #f8f9fa;
+            --device-bg: #e9ecef;
+            --device-item-bg: white;
+            --drop-zone-bg: #e9ecef;
+            --drop-zone-border: #adb5bd;
+            --button-primary: linear-gradient(to right, #2a9d8f, #264653);
+            --button-secondary: linear-gradient(to right, #e63946, #d90429);
+            --button-tertiary: linear-gradient(to right, #3a86ff, #023e8a);
+            --message-color: #2a9d8f;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .dark-mode {
+            --bg-primary: linear-gradient(135deg, #1a033d 0%, #0c2b6c 100%);
+            --bg-secondary: rgba(30, 30, 40, 0.95);
+            --text-primary: #f0f0f0;
+            --text-secondary: #b0b0c0;
+            --header-bg: linear-gradient(to right, #7c3c20, #b3622a);
+            --header-text: #f0f0f0;
+            --instructions-bg: #2a2a3a;
+            --device-bg: #2a2a3a;
+            --device-item-bg: #3a3a4a;
+            --drop-zone-bg: #2a2a3a;
+            --drop-zone-border: #555570;
+            --button-primary: linear-gradient(to right, #1d6d63, #1a3c46);
+            --button-secondary: linear-gradient(to right, #9e2835, #8a031c);
+            --button-tertiary: linear-gradient(to right, #2a5bb0, #022b6a);
+            --message-color: #3bb0a0;
+            --shadow-color: rgba(0, 0, 0, 0.4);
+        }
+        
+        body {
+            background: var(--bg-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: var(--text-primary);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background-color: var(--bg-secondary);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            overflow: hidden;
+            margin: 20px 0;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        header {
+            background: var(--header-bg);
+            color: var(--header-text);
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .instructions {
+            background-color: var(--instructions-bg);
+            padding: 15px 20px;
+            border-bottom: 2px solid var(--device-bg);
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+        
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background-color: var(--instructions-bg);
+            border-bottom: 2px solid var(--device-bg);
+            transition: background-color 0.3s ease;
+        }
+        
+        .score, .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+        
+        .timer {
+            color: #e63946;
+        }
+        
+        .game-area {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        .devices-container {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--device-bg);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s ease;
+        }
+        
+        .category-title {
+            text-align: center;
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+            font-weight: bold;
+            font-size: 1.3rem;
+            transition: color 0.3s ease;
+        }
+        
+        .devices-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .device-item {
+            width: 120px;
+            height: 120px;
+            background-color: var(--device-item-bg);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s ease;
+            padding: 10px;
+        }
+        
+        .device-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px var(--shadow-color);
+        }
+        
+        .device-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+        
+        .device-name {
+            margin-top: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .drop-zones {
+            flex: 2;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .category {
+            background-color: var(--instructions-bg);
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 200px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .category h3 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+        
+        .drop-zone {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            min-height: 150px;
+            padding: 15px;
+            background-color: var(--drop-zone-bg);
+            border-radius: 8px;
+            border: 2px dashed var(--drop-zone-border);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .drop-zone.hover {
+            background-color: #d8e2dc;
+            border-color: #2a9d8f;
+        }
+        
+        .message {
+            text-align: center;
+            padding: 15px;
+            font-weight: bold;
+            color: var(--message-color);
+            min-height: 30px;
+            transition: color 0.3s ease;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 15px;
+            background-color: var(--instructions-bg);
+            border-top: 2px solid var(--device-bg);
+            transition: background-color 0.3s ease;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        #start-btn {
+            background: var(--button-primary);
+            color: white;
+        }
+        
+        #reset-btn {
+            background: var(--button-secondary);
+            color: white;
+        }
+        
+        #submit-btn {
+            background: var(--button-tertiary);
+            color: white;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: white;
+            font-weight: bold;
+            margin-top: auto;
+        }
+        
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .toggle-btn {
+            width: 60px;
+            height: 30px;
+            background: var(--button-tertiary);
+            border-radius: 15px;
+            padding: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+        
+        .toggle-thumb {
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .dark-mode .toggle-thumb {
+            transform: translateX(30px);
+        }
+        
+        .toggle-icon {
+            font-size: 12px;
+            color: #3a86ff;
+        }
+        
+        .dark-mode .toggle-icon {
+            color: #1a033d;
+        }
+        
+        /* Language Toggle */
+        .language-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+        
+        .lang-btn {
+            padding: 10px 15px;
+            background: var(--button-tertiary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+        
+        /* Results Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: var(--bg-secondary);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 5px 25px var(--shadow-color);
+            max-height: 90vh;
+            overflow-y: auto;
+            transition: background-color 0.3s ease;
+        }
+        
+        .modal h2 {
+            color: var(--message-color);
+            margin-bottom: 20px;
+        }
+        
+        .results-info {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .result-item {
+            text-align: center;
+            margin: 10px;
+        }
+        
+        .result-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3a86ff;
+        }
+        
+        .correct {
+            color: #2a9d8f;
+        }
+        
+        .incorrect {
+            color: #e63946;
+        }
+        
+        .modal-buttons {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .answer-review {
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .answer-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: var(--instructions-bg);
+            transition: background-color 0.3s ease;
+        }
+        
+        .answer-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            object-fit: contain;
+        }
+        
+        .answer-status {
+            margin-left: auto;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .game-area {
+                flex-direction: column;
+            }
+            
+            .device-item {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .device-item img {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .results-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+            }
+            
+            .language-toggle {
+                top: 10px;
+                left: 10px;
+            }
+            
+            .toggle-btn {
+                width: 50px;
+                height: 25px;
+            }
+            
+            .dark-mode .toggle-thumb {
+                transform: translateX(25px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Toggle Button -->
+    <div class="language-toggle">
+        <button class="lang-btn" id="language-toggle">
+            <i class="fas fa-language"></i>
+            <span id="language-text">English</span>
+        </button>
+    </div>
+    
+    <!-- Theme Toggle Button -->
+    <div class="theme-toggle">
+        <div class="toggle-btn" id="theme-toggle">
+            <div class="toggle-thumb">
+                <i class="toggle-icon fas fa-adjust"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>පරිගණක ආදාන හා ප්‍රතිදාන උපාංග</h1>
+            <p>උපාංග නිවැරදි කාණ්ඩයට ඇදගෙන යන්න</p>
+        </header>
+        
+        <div class="instructions">
+            <p><i class="fas fa-info-circle"></i> එක් එක් උපාංගය ආදාන හෝ ප්‍රතිදාන කාණ්ඩයට ඇදගෙන යන්න. ඔබ අවසන් කළ විට ඉදිරිපත් කරන්න බලන්න!</p>
+        </div>
+        
+        <div class="game-info">
+            <div class="score">ලකුණු: <span id="score">0</span></div>
+            <div class="timer">කාලය: <span id="timer">60</span> යි</div>
+        </div>
+        
+        <div class="game-area">
+            <div class="devices-container">
+                <h2 class="category-title">උපාංග</h2>
+                <div class="devices-list" id="devices">
+                    <div class="device-item" draggable="true" data-type="input" data-name="යතුරුපුවරුව">
+                        <img src="/media/key-removebg-preview.png" alt="යතුරුපුවරුව">
+                        <div class="device-name">යතුරුපුවරුව</div>
+                    </div>
+                    <div class="device-item" draggable="true" data-type="output" data-name="මොනිටරය">
+                        <img src="/media/monitor-image-removebg-preview.png" alt="මොනිටරය">
+                        <div class="device-name">මොනිටරය</div>
+                    </div>
+                    <div class="device-item" draggable="true" data-type="input" data-name="මවුසය">
+                        <img src="/media/mousd-removebg-preview.png" alt="මවුසය">
+                        <div class="device-name">මවුසය</div>
+                    </div>
+                    <div class="device-item" draggable="true" data-type="output" data-name="මුද්‍රණ යන්ත්‍රය">
+                        <img src="/media/printer-removebg-preview.png" alt="මුද්‍රණ යන්ත්‍රය">
+                        <div class="device-name">මුද්‍රණ යන්ත්‍රය</div>
+                    </div>
+                    <div class="device-item" draggable="true" data-type="input" data-name="මයික්‍රෆෝනය">
+                        <img src="/media/mic-removebg-preview.png" alt="මයික්‍රෆෝනය">
+                        <div class="device-name">මයික්‍රෆෝනය</div>
+                    </div>
+                    <div class="device-item" draggable="true" data-type="output" data-name="ස්පීකර්">
+                        <img src="/media/speaker-removebg-preview.png" alt="ස්පීකර්">
+                        <div class="device-name">ස්පීකර්</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="drop-zones">
+                <div class="category">
+                    <h3>ආදාන උපාංග</h3>
+                    <div class="drop-zone" id="input-drop">
+                        <p>මෙහි ඇද දමන්න</p>
+                    </div>
+                </div>
+                
+                <div class="category">
+                    <h3>ප්‍රතිදාන උපාංග</h3>
+                    <div class="drop-zone" id="output-drop">
+                        <p>මෙහි ඇද දමන්න</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="message" id="message">උපාංග නිවැරදි කාණ්ඩයට ඇදගෙන යන්න!</div>
+        
+        <div class="controls">
+            <button id="start-btn">ක්‍රීඩාව ආරම්භ කරන්න</button>
+            <button id="reset-btn" disabled>ක්‍රීඩාව යළි ආරම්භ කරන්න</button>
+            <button id="submit-btn" disabled>පිළිතුරු ඉදිරිපත් කරන්න</button>
+        </div>
+    </div>
+    
+    <footer>
+        &copy; Blank-X-Innovations - පරිගණක උපාංග ඉගෙනුම් ක්‍රීඩාව
+    </footer>
+
+    <!-- Results Modal -->
+    <div class="modal" id="results-modal">
+        <div class="modal-content">
+            <h2>ක්‍රීඩා ප්‍රතිඵල</h2>
+            <p>ඔබ ක්‍රීඩාව අවසන් කළා! මෙන්න ඔබේ ප්‍රතිඵල:</p>
+            
+            <div class="results-info">
+                <div class="result-item">
+                    <div class="result-label">අවසන් ලකුණු</div>
+                    <div class="result-value" id="final-score">0</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">ඉතිරි කාලය</div>
+                    <div class="result-value" id="time-left">0 තත්</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">නිවැරදි පිළිතුරු</div>
+                    <div class="result-value correct" id="correct-answers">0/6</div>
+                </div>
+            </div>
+            
+            <div class="answer-review">
+                <h3>ඔබේ පිළිතුරු:</h3>
+                <div id="detailed-results">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button id="play-again-btn">නැවත ක්‍රීඩා කරන්න</button>
+                <button id="close-btn">වසන්න</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startBtn = document.getElementById('start-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            const scoreElement = document.getElementById('score');
+            const timerElement = document.getElementById('timer');
+            const messageElement = document.getElementById('message');
+            const inputDrop = document.getElementById('input-drop');
+            const outputDrop = document.getElementById('output-drop');
+            const devices = document.querySelectorAll('.device-item');
+            const resultsModal = document.getElementById('results-modal');
+            const finalScoreElement = document.getElementById('final-score');
+            const timeLeftElement = document.getElementById('time-left');
+            const correctAnswersElement = document.getElementById('correct-answers');
+            const detailedResultsElement = document.getElementById('detailed-results');
+            const playAgainBtn = document.getElementById('play-again-btn');
+            const closeBtn = document.getElementById('close-btn');
+            const themeToggle = document.getElementById('theme-toggle');
+            const languageToggle = document.getElementById('language-toggle');
+            const languageText = document.getElementById('language-text');
+            
+            let score = 0;
+            let timeLeft = 60;
+            let timerInterval;
+            let gameActive = false;
+            let correctAnswers = 0;
+            let totalDevices = devices.length;
+            
+            // Theme toggle functionality
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                if (document.body.classList.contains('dark-mode')) {
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+            
+            // Language toggle functionality
+            languageToggle.addEventListener('click', function() {
+                window.location.href = 'index.html';
+            });
+            
+            // Check for saved theme preference
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+            
+            // Initialize drag and drop
+            devices.forEach(device => {
+                device.addEventListener('dragstart', dragStart);
+                device.addEventListener('dragend', dragEnd);
+            });
+            
+            // Set up drop zones
+            [inputDrop, outputDrop].forEach(zone => {
+                zone.addEventListener('dragover', dragOver);
+                zone.addEventListener('dragenter', dragEnter);
+                zone.addEventListener('dragleave', dragLeave);
+                zone.addEventListener('drop', drop);
+            });
+            
+            // Start game button
+            startBtn.addEventListener('click', startGame);
+            
+            // Reset game button
+            resetBtn.addEventListener('click', resetGame);
+            
+            // Submit answers button
+            submitBtn.addEventListener('click', showResults);
+            
+            // Modal buttons
+            playAgainBtn.addEventListener('click', resetGame);
+            closeBtn.addEventListener('click', () => {
+                resultsModal.style.display = 'none';
+            });
+            
+            function dragStart() {
+                this.classList.add('dragging');
+            }
+            
+            function dragEnd() {
+                this.classList.remove('dragging');
+            }
+            
+            function dragOver(e) {
+                e.preventDefault();
+            }
+            
+            function dragEnter(e) {
+                e.preventDefault();
+                this.classList.add('hover');
+            }
+            
+            function dragLeave() {
+                this.classList.remove('hover');
+            }
+            
+            function drop(e) {
+                e.preventDefault();
+                this.classList.remove('hover');
+                
+                if (!gameActive) {
+                    messageElement.textContent = "කරුණාකර පළමුව ක්‍රීඩාව ආරම්භ කරන්න!";
+                    return;
+                }
+                
+                const draggedDevice = document.querySelector('.dragging');
+                const deviceType = draggedDevice.getAttribute('data-type');
+                const dropZoneId = this.id;
+                
+                if ((dropZoneId === 'input-drop' && deviceType === 'input') || 
+                    (dropZoneId === 'output-drop' && deviceType === 'output')) {
+                    this.appendChild(draggedDevice);
+                    score += 5;
+                    scoreElement.textContent = score;
+                    messageElement.textContent = "නිවැරදියි! හොඳින් කළා!";
+                    messageElement.style.color = "#2a9d8f";
+                    
+                    checkGameCompletion();
+                } else {
+                    this.appendChild(draggedDevice);
+                    messageElement.textContent = "උපාංගය තබා ඇත. අවශ්‍ය නම් එය චලනය කළ හැක.";
+                    messageElement.style.color = "#3a86ff";
+                }
+            }
+            
+            function startGame() {
+                if (gameActive) return;
+                
+                gameActive = true;
+                score = 0;
+                timeLeft = 60;
+                scoreElement.textContent = score;
+                timerElement.textContent = timeLeft;
+                messageElement.textContent = "ක්‍රීඩාව ආරම්භ විය! උපාංග නිවැරදි කාණ්ඩයට ඇදගෙන යන්න!";
+                messageElement.style.color = "#2a9d8f";
+                
+                const devicesList = document.getElementById('devices');
+                devices.forEach(device => {
+                    devicesList.appendChild(device);
+                });
+                
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    timerElement.textContent = timeLeft;
+                    
+                    if (timeLeft <= 0) {
+                        endGame();
+                    }
+                }, 1000);
+                
+                startBtn.disabled = true;
+                resetBtn.disabled = false;
+                submitBtn.disabled = false;
+            }
+            
+            function resetGame() {
+                clearInterval(timerInterval);
+                gameActive = false;
+                score = 0;
+                timeLeft = 60;
+                scoreElement.textContent = score;
+                timerElement.textContent = timeLeft;
+                messageElement.textContent = "ක්‍රීඩාව යළි ආරම්භ කර ඇත. ආරම්භ කිරීමට Start ඔබන්න!";
+                messageElement.style.color = "#2a9d8f";
+                
+                const devicesList = document.getElementById('devices');
+                devices.forEach(device => {
+                    devicesList.appendChild(device);
+                });
+                
+                startBtn.disabled = false;
+                resetBtn.disabled = true;
+                submitBtn.disabled = true;
+                
+                resultsModal.style.display = 'none';
+            }
+            
+            function checkGameCompletion() {
+                const inputDevices = inputDrop.querySelectorAll('.device-item');
+                const outputDevices = outputDrop.querySelectorAll('.device-item');
+                
+                if (inputDevices.length + outputDevices.length === devices.length) {
+                    messageElement.textContent = "සියලු උපාංග තබා ඇත! ඔබේ ප්‍රතිඵල බැලීමට Submit ඔබන්න.";
+                }
+            }
+            
+            function endGame() {
+                clearInterval(timerInterval);
+                gameActive = false;
+                
+                const timeBonus = Math.max(0, timeLeft) * 2;
+                score += timeBonus;
+                scoreElement.textContent = score;
+                
+                messageElement.textContent = `කාලය අවසන්! අවසන් ලකුණු: ${score} (කාල බෝනස්: +${timeBonus})`;
+                messageElement.style.color = "#6a11cb";
+                
+                startBtn.disabled = false;
+            }
+            
+            function showResults() {
+                clearInterval(timerInterval);
+                gameActive = false;
+                
+                const inputDevices = inputDrop.querySelectorAll('.device-item');
+                const outputDevices = outputDrop.querySelectorAll('.device-item');
+                
+                let correctCount = 0;
+                let resultsHTML = '';
+                
+                inputDevices.forEach(device => {
+                    const deviceType = device.getAttribute('data-type');
+                    const deviceName = device.getAttribute('data-name');
+                    const isCorrect = deviceType === 'input';
+                    
+                    if (isCorrect) correctCount++;
+                    
+                    resultsHTML += `
+                        <div class="answer-item">
+                            <img class="answer-icon" src="${device.querySelector('img').src}" alt="${deviceName}">
+                            <div>${deviceName}</div>
+                            <div class="answer-status ${isCorrect ? 'correct' : 'incorrect'}">
+                                ${isCorrect ? 'ආදාන ✓' : 'ආදාන ✗ (ප්‍රතිදාන විය යුතුය)'}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                outputDevices.forEach(device => {
+                    const deviceType = device.getAttribute('data-type');
+                    const deviceName = device.getAttribute('data-name');
+                    const isCorrect = deviceType === 'output';
+                    
+                    if (isCorrect) correctCount++;
+                    
+                    resultsHTML += `
+                        <div class="answer-item">
+                            <img class="answer-icon" src="${device.querySelector('img').src}" alt="${deviceName}">
+                            <div>${deviceName}</div>
+                            <div class="answer-status ${isCorrect ? 'correct' : 'incorrect'}">
+                                ${isCorrect ? 'ප්‍රතිදාන ✓' : 'ප්‍රතිදාන ✗ (ආදාන විය යුතුය)'}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                const timeBonus = Math.max(0, timeLeft) * 2;
+                const finalScore = score + timeBonus;
+                
+                finalScoreElement.textContent = finalScore;
+                timeLeftElement.textContent = `${timeLeft} තත්`;
+                correctAnswersElement.textContent = `${correctCount}/${totalDevices}`;
+                
+                detailedResultsElement.innerHTML = resultsHTML;
+                
+                resultsModal.style.display = 'flex';
+            }
+        });
+    </script>
+</body>
+</html>
