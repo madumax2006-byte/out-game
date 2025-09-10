@@ -1,1 +1,721 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Devices Learning Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        header {
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .instructions {
+            background-color: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 2px solid #e9ecef;
+            text-align: center;
+        }
+        
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .score, .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .timer {
+            color: #e63946;
+        }
+        
+        .game-area {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        .devices-container {
+            flex: 1;
+            min-width: 300px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .category-title {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #495057;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+        
+        .devices-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .device-item {
+            width: 120px;
+            height: 120px;
+            background-color: white;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            padding: 10px;
+        }
+        
+        .device-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .device-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+        
+        .device-name {
+            margin-top: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .drop-zones {
+            flex: 2;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .category {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 200px;
+        }
+        
+        .category h3 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #495057;
+        }
+        
+        .drop-zone {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            min-height: 150px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            border: 2px dashed #adb5bd;
+        }
+        
+        .drop-zone.hover {
+            background-color: #d8e2dc;
+            border-color: #2a9d8f;
+        }
+        
+        .message {
+            text-align: center;
+            padding: 15px;
+            font-weight: bold;
+            color: #2a9d8f;
+            min-height: 30px;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-top: 2px solid #e9ecef;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        #start-btn {
+            background: linear-gradient(to right, #2a9d8f, #264653);
+            color: white;
+        }
+        
+        #reset-btn {
+            background: linear-gradient(to right, #e63946, #d90429);
+            color: white;
+        }
+        
+        #submit-btn {
+            background: linear-gradient(to right, #3a86ff, #023e8a);
+            color: white;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: white;
+            font-weight: bold;
+            margin-top: auto;
+        }
+        
+        /* Results Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal h2 {
+            color: #2a9d8f;
+            margin-bottom: 20px;
+        }
+        
+        .results-info {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .result-item {
+            text-align: center;
+            margin: 10px;
+        }
+        
+        .result-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3a86ff;
+        }
+        
+        .correct {
+            color: #2a9d8f;
+        }
+        
+        .incorrect {
+            color: #e63946;
+        }
+        
+        .modal-buttons {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .answer-review {
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .answer-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+        
+        .answer-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            object-fit: contain;
+        }
+        
+        .answer-status {
+            margin-left: auto;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .game-area {
+                flex-direction: column;
+            }
+            
+            .device-item {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .device-item img {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .results-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Computer Input & Output Devices</h1>
+            <p>Drag the devices to the correct category</p>
+        </header>
+        
+        <div class="instructions">
+            <p><i class="fas fa-info-circle"></i> Drag each device to either Input or Output category. Submit when you're done to see your results!</p>
+        </div>
+        
+        <div class="game-info">
+            <div class="score">Score: <span id="score">0</span></div>
+            <div class="timer">Time: <span id="timer">60</span>s</div>
+        </div>
+        
+        <div class="game-area">
+            <div class="devices-container">
+                <h2 class="category-title">Devices</h2>
+                <div class="devices-list" id="devices">
+                    <div class="device-item" draggable="true" data-type="input" data-name="Keyboard">
+                        <img src="https://cdn-icons-png.flaticon.com/512/25/25671.png" alt="Keyboard">
+                        <div class="device-name">Keyboard</div>
+                    </div>
+                    <div class="device-item" draggable="true" data-type="output" data-name="Monitor">
+                        <img src="https://cdn-icons-png.flaticon.com/512/69/69480.png" alt="Monitor">
+                        <div class="device-name">Monitor</div>
+                    </div>
+                    <div class="device-item" draggable="true" data-type="input" data-name="Mouse">
+                        <img src="https://cdn-icons-png.flaticon.com/512/50/50405.png" alt="Mouse">
+                        <div class="device-name">Mouse</div>
+                    </div>
+                    <div class="device-item" draggable="true" data-type="output" data-name="Printer">
+                        <img src="https://cdn-icons-png.flaticon.com/512/54/54481.png" alt="Printer">
+                        <div class="device-name">Printer</div>
+                    </div>
+                    <div class="device-item" draggable="true" data-type="input" data-name="Microphone">
+                        <img src="https://cdn-icons-png.flaticon.com/512/57/57145.png" alt="Microphone">
+                        <div class="device-name">Microphone</div>
+                    </div>
+                    <div class="device-item" draggable="true" data-type="output" data-name="Speakers">
+                        <img src="https://cdn-icons-png.flaticon.com/512/78/78386.png" alt="Speakers">
+                        <div class="device-name">Speakers</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="drop-zones">
+                <div class="category">
+                    <h3>Input Devices</h3>
+                    <div class="drop-zone" id="input-drop">
+                        <p>Drop input devices here</p>
+                    </div>
+                </div>
+                
+                <div class="category">
+                    <h3>Output Devices</h3>
+                    <div class="drop-zone" id="output-drop">
+                        <p>Drop output devices here</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="message" id="message">Drag devices to the correct category!</div>
+        
+        <div class="controls">
+            <button id="start-btn">Start Game</button>
+            <button id="reset-btn" disabled>Reset Game</button>
+            <button id="submit-btn" disabled>Submit Answers</button>
+        </div>
+    </div>
+    
+    <footer>
+        Created by Mr. Hemal - Computer Devices Learning Game
+    </footer>
+
+    <!-- Results Modal -->
+    <div class="modal" id="results-modal">
+        <div class="modal-content">
+            <h2>Game Results</h2>
+            <p>You've completed the game! Here's how you did:</p>
+            
+            <div class="results-info">
+                <div class="result-item">
+                    <div class="result-label">Final Score</div>
+                    <div class="result-value" id="final-score">0</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Time Left</div>
+                    <div class="result-value" id="time-left">0s</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Correct Answers</div>
+                    <div class="result-value correct" id="correct-answers">0/6</div>
+                </div>
+            </div>
+            
+            <div class="answer-review">
+                <h3>Your Answers:</h3>
+                <div id="detailed-results">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button id="play-again-btn">Play Again</button>
+                <button id="close-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startBtn = document.getElementById('start-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            const scoreElement = document.getElementById('score');
+            const timerElement = document.getElementById('timer');
+            const messageElement = document.getElementById('message');
+            const inputDrop = document.getElementById('input-drop');
+            const outputDrop = document.getElementById('output-drop');
+            const devices = document.querySelectorAll('.device-item');
+            const resultsModal = document.getElementById('results-modal');
+            const finalScoreElement = document.getElementById('final-score');
+            const timeLeftElement = document.getElementById('time-left');
+            const correctAnswersElement = document.getElementById('correct-answers');
+            const detailedResultsElement = document.getElementById('detailed-results');
+            const playAgainBtn = document.getElementById('play-again-btn');
+            const closeBtn = document.getElementById('close-btn');
+            
+            let score = 0;
+            let timeLeft = 60;
+            let timerInterval;
+            let gameActive = false;
+            let correctAnswers = 0;
+            let totalDevices = devices.length;
+            
+            // Initialize drag and drop
+            devices.forEach(device => {
+                device.addEventListener('dragstart', dragStart);
+                device.addEventListener('dragend', dragEnd);
+            });
+            
+            // Set up drop zones
+            [inputDrop, outputDrop].forEach(zone => {
+                zone.addEventListener('dragover', dragOver);
+                zone.addEventListener('dragenter', dragEnter);
+                zone.addEventListener('dragleave', dragLeave);
+                zone.addEventListener('drop', drop);
+            });
+            
+            // Start game button
+            startBtn.addEventListener('click', startGame);
+            
+            // Reset game button
+            resetBtn.addEventListener('click', resetGame);
+            
+            // Submit answers button
+            submitBtn.addEventListener('click', showResults);
+            
+            // Modal buttons
+            playAgainBtn.addEventListener('click', resetGame);
+            closeBtn.addEventListener('click', () => {
+                resultsModal.style.display = 'none';
+            });
+            
+            function dragStart() {
+                this.classList.add('dragging');
+            }
+            
+            function dragEnd() {
+                this.classList.remove('dragging');
+            }
+            
+            function dragOver(e) {
+                e.preventDefault();
+            }
+            
+            function dragEnter(e) {
+                e.preventDefault();
+                this.classList.add('hover');
+            }
+            
+            function dragLeave() {
+                this.classList.remove('hover');
+            }
+            
+            function drop(e) {
+                e.preventDefault();
+                this.classList.remove('hover');
+                
+                if (!gameActive) {
+                    messageElement.textContent = "Please start the game first!";
+                    return;
+                }
+                
+                const draggedDevice = document.querySelector('.dragging');
+                const deviceType = draggedDevice.getAttribute('data-type');
+                const dropZoneId = this.id;
+                
+                // Check if the drop is correct
+                if ((dropZoneId === 'input-drop' && deviceType === 'input') || 
+                    (dropZoneId === 'output-drop' && deviceType === 'output')) {
+                    // Correct drop
+                    this.appendChild(draggedDevice);
+                    score += 5;
+                    scoreElement.textContent = score;
+                    messageElement.textContent = "Correct! Well done!";
+                    messageElement.style.color = "#2a9d8f";
+                    
+                    // Check if all devices are correctly placed
+                    checkGameCompletion();
+                } else {
+                    // Allow drop in any case but don't show error message
+                    this.appendChild(draggedDevice);
+                    messageElement.textContent = "Device placed. You can move it if needed.";
+                    messageElement.style.color = "#3a86ff";
+                }
+            }
+            
+            function startGame() {
+                if (gameActive) return;
+                
+                gameActive = true;
+                score = 0;
+                timeLeft = 60;
+                scoreElement.textContent = score;
+                timerElement.textContent = timeLeft;
+                messageElement.textContent = "Game started! Drag devices to the correct category!";
+                messageElement.style.color = "#2a9d8f";
+                
+                // Move all devices back to devices list
+                const devicesList = document.getElementById('devices');
+                devices.forEach(device => {
+                    devicesList.appendChild(device);
+                });
+                
+                // Start timer
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    timerElement.textContent = timeLeft;
+                    
+                    if (timeLeft <= 0) {
+                        endGame();
+                    }
+                }, 1000);
+                
+                startBtn.disabled = true;
+                resetBtn.disabled = false;
+                submitBtn.disabled = false;
+            }
+            
+            function resetGame() {
+                clearInterval(timerInterval);
+                gameActive = false;
+                score = 0;
+                timeLeft = 60;
+                scoreElement.textContent = score;
+                timerElement.textContent = timeLeft;
+                messageElement.textContent = "Game reset. Press Start to play!";
+                messageElement.style.color = "#2a9d8f";
+                
+                // Move all devices back to devices list
+                const devicesList = document.getElementById('devices');
+                devices.forEach(device => {
+                    devicesList.appendChild(device);
+                });
+                
+                startBtn.disabled = false;
+                resetBtn.disabled = true;
+                submitBtn.disabled = true;
+                
+                // Hide results modal if open
+                resultsModal.style.display = 'none';
+            }
+            
+            function checkGameCompletion() {
+                const inputDevices = inputDrop.querySelectorAll('.device-item');
+                const outputDevices = outputDrop.querySelectorAll('.device-item');
+                
+                if (inputDevices.length + outputDevices.length === devices.length) {
+                    // All devices placed
+                    messageElement.textContent = "All devices placed! Click Submit to see your results.";
+                }
+            }
+            
+            function endGame() {
+                clearInterval(timerInterval);
+                gameActive = false;
+                
+                // Calculate final score
+                const timeBonus = Math.max(0, timeLeft) * 2;
+                score += timeBonus;
+                scoreElement.textContent = score;
+                
+                messageElement.textContent = `Time's up! Final Score: ${score} (Time bonus: +${timeBonus})`;
+                messageElement.style.color = "#6a11cb";
+                
+                startBtn.disabled = false;
+            }
+            
+            function showResults() {
+                clearInterval(timerInterval);
+                gameActive = false;
+                
+                // Calculate results
+                const inputDevices = inputDrop.querySelectorAll('.device-item');
+                const outputDevices = outputDrop.querySelectorAll('.device-item');
+                
+                let correctCount = 0;
+                let resultsHTML = '';
+                
+                // Check input devices
+                inputDevices.forEach(device => {
+                    const deviceType = device.getAttribute('data-type');
+                    const deviceName = device.getAttribute('data-name');
+                    const isCorrect = deviceType === 'input';
+                    
+                    if (isCorrect) correctCount++;
+                    
+                    resultsHTML += `
+                        <div class="answer-item">
+                            <img class="answer-icon" src="${device.querySelector('img').src}" alt="${deviceName}">
+                            <div>${deviceName}</div>
+                            <div class="answer-status ${isCorrect ? 'correct' : 'incorrect'}">
+                                ${isCorrect ? 'Input ✓' : 'Input ✗ (Should be Output)'}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                // Check output devices
+                outputDevices.forEach(device => {
+                    const deviceType = device.getAttribute('data-type');
+                    const deviceName = device.getAttribute('data-name');
+                    const isCorrect = deviceType === 'output';
+                    
+                    if (isCorrect) correctCount++;
+                    
+                    resultsHTML += `
+                        <div class="answer-item">
+                            <img class="answer-icon" src="${device.querySelector('img').src}" alt="${deviceName}">
+                            <div>${deviceName}</div>
+                            <div class="answer-status ${isCorrect ? 'correct' : 'incorrect'}">
+                                ${isCorrect ? 'Output ✓' : 'Output ✗ (Should be Input)'}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                // Calculate final score with time bonus
+                const timeBonus = Math.max(0, timeLeft) * 2;
+                const finalScore = score + timeBonus;
+                
+                // Update modal with results
+                finalScoreElement.textContent = finalScore;
+                timeLeftElement.textContent = `${timeLeft}s`;
+                correctAnswersElement.textContent = `${correctCount}/${totalDevices}`;
+                
+                // Generate detailed results with icons
+                detailedResultsElement.innerHTML = resultsHTML;
+                
+                // Show modal
+                resultsModal.style.display = 'flex';
+            }
+        });
+    </script>
+</body>
+</html>
